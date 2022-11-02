@@ -2,6 +2,10 @@ import { RequestHandler, Request, Response } from "express";
 import AsyncHandler from "express-async-handler";
 import db from "../config/db";
 import bcrypt from "bcrypt"
+import { json } from "sequelize";
+import Customer from "../models/Customer";
+import generateToken from "../utils/utils";
+
 
 
 
@@ -66,4 +70,49 @@ const deleteUser: RequestHandler = AsyncHandler((async (req: Request, res: Respo
 }))
 
 
-export { getAll, addUser, updateUser, deleteUser }
+const logIn: RequestHandler = AsyncHandler((async (req: Request, res: Response) => {
+
+    let obj = req.body
+
+    let user = await db.models.Customer.findOne({ where: { email: `${obj.email}` } });
+
+    console.log(user.getDataValue("password"))
+
+
+
+    if (user) {
+        let authentificate = bcrypt.compareSync(obj.password, user.getDataValue("password"))
+
+        if (authentificate) {
+            res.status(200).json({
+                id: user.getDataValue("id"),
+                token: generateToken(user.getDataValue("id"))
+            })
+        }
+
+    } else {
+        res.status(401);
+        throw new Error("Parola gresita!");
+    }
+
+}))
+
+
+const uploadPhoto: RequestHandler = AsyncHandler((async (req: Request, res: Response) => {
+
+    let { id } = req.params
+
+    let user = await db.models.Customer.findByPk(id)
+
+    if (user) {
+        user.set({
+            picture: req.body,
+        });
+
+        user.save();
+    }
+    res.status(200).send("upload succes");
+
+}))
+
+export { getAll, addUser, updateUser, deleteUser, logIn, uploadPhoto }

@@ -8,10 +8,11 @@ export interface ProductAtributes {
   category: String;
   create_date: String;
   stock: number;
+  picture: Blob
 }
 
 export default (sequelize: Sequelize) => {
-  class Product extends Model<ProductAtributes> {}
+  class Product extends Model<ProductAtributes> { }
 
   Product.init(
     {
@@ -110,6 +111,10 @@ export default (sequelize: Sequelize) => {
           },
         },
       },
+
+      picture: {
+        type: DataTypes.BLOB("long")
+      }
     },
     {
       sequelize: sequelize,

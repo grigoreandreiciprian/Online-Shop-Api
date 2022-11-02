@@ -11,13 +11,15 @@ export interface CostumerAtributes {
     billingAddress: string
     country: string
     phone: bigint
+    picture: Blob
 
 }
 
 export default (sequelize: Sequelize) => {
 
 
-    class Custumer extends Model<CostumerAtributes>{ };
+    class Custumer extends Model<CostumerAtributes>{
+    };
 
 
     Custumer.init({
@@ -118,6 +120,10 @@ export default (sequelize: Sequelize) => {
                 },
             },
         },
+
+        picture: {
+            type: DataTypes.BLOB("long")
+        }
 
     }, {
         sequelize: sequelize,

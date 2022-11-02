@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.updateProduct = exports.addProduct = exports.getProducts = void 0;
+exports.uploadPhoto = exports.deleteProduct = exports.updateProduct = exports.addProduct = exports.getProducts = void 0;
 const db_1 = __importDefault(require("../config/db"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const getProducts = (0, express_async_handler_1.default)(((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -46,4 +46,16 @@ const deleteProduct = (0, express_async_handler_1.default)(((req, res) => __awai
     res.status(200).end();
 })));
 exports.deleteProduct = deleteProduct;
+const uploadPhoto = (0, express_async_handler_1.default)(((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { id } = req.params;
+    let product = yield db_1.default.models.Product.findByPk(id);
+    if (product) {
+        product.set({
+            picture: req.body,
+        });
+        product.save();
+    }
+    res.status(200).send("upload succes");
+})));
+exports.uploadPhoto = uploadPhoto;
 //# sourceMappingURL=productControler.js.map

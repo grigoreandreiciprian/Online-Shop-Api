@@ -60,5 +60,23 @@ const deleteProduct: RequestHandler = AsyncHandler((async (req: Request, res: Re
     res.status(200).end()
 }))
 
+const uploadPhoto: RequestHandler = AsyncHandler((async (req: Request, res: Response) => {
 
-export { getProducts, addProduct, updateProduct, deleteProduct }
+    let { id } = req.params
+
+    let product = await db.models.Product.findByPk(id)
+
+    if (product) {
+        product.set({
+            picture: req.body,
+        });
+
+        product.save();
+    }
+    res.status(200).send("upload succes");
+
+}))
+
+
+
+export { getProducts, addProduct, updateProduct, deleteProduct, uploadPhoto }

@@ -83,6 +83,9 @@ exports.default = (sequelize) => {
                 },
             },
         },
+        picture: {
+            type: sequelize_1.DataTypes.BLOB("long")
+        }
     }, {
         sequelize: sequelize,
         tableName: "costumers",
