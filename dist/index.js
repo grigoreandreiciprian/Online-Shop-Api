@@ -20,8 +20,11 @@ const productsRoute_1 = __importDefault(require("./src/routes/productsRoute"));
 const costumerRoute_1 = __importDefault(require("./src/routes/costumerRoute"));
 const orderRoute_1 = __importDefault(require("./src/routes/orderRoute"));
 const orderDetailsRoute_1 = __importDefault(require("./src/routes/orderDetailsRoute"));
+const favoriteRoute_1 = __importDefault(require("./src/routes/favoriteRoute"));
 dotenv_1.default.config();
+const paginate = require("express-paginate");
 let app = (0, express_1.default)();
+app.use(paginate.middleware(10, 50));
 app.use((0, cors_1.default)());
 app.use(express_1.default.json({ limit: "50mb" }));
 app.use(express_1.default.urlencoded({ limit: "50mb" }));
@@ -29,6 +32,7 @@ app.use("/api/v1/products", productsRoute_1.default);
 app.use("/api/v1/users", costumerRoute_1.default);
 app.use("/api/v1/orders", orderRoute_1.default);
 app.use("/api/v1/orderDetails", orderDetailsRoute_1.default);
+app.use("/api/v1/favorite", favoriteRoute_1.default);
 db_1.default.sequelize.sync().then(() => {
     app.listen(process.env.PORT || 5000, () => __awaiter(void 0, void 0, void 0, function* () {
         console.log("Express server is listening on port 5000!");

@@ -17,18 +17,27 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = __importDefault(require("../config/db"));
 const protect = (0, express_async_handler_1.default)(((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let token;
-    console.log("Intra in protect");
     if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
         try {
-            console.log("aici");
             token = req.headers.authorization.split(" ")[1];
             const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
             const user = yield db_1.default.models.Customer.findByPk(decoded.id);
+            req.user = {
+                id: user.get().id,
+                email: user.get().email,
+                password: user.get().password,
+                fullName: user.get().fullName,
+                streetAdress: user.get().streetAdress,
+                province: user.get().province,
+                city: user.get().city,
+                postalCode: user.get().postalCode,
+                country: user.get().country,
+                phone: user.get().phone
+            };
             next();
         }
         catch (e) {
             throw new Error("No authorizion ,toke failed");
-            res.status(401);
         }
     }
     if (!token) {

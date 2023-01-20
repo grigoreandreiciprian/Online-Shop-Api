@@ -14,5 +14,6 @@ router.route("/").post(authentification_1.default, productControler_1.addProduct
 router.route("/:id").put(authentification_1.default, productControler_1.updateProduct, errorHandler_1.default);
 router.route("/:id").delete(authentification_1.default, productControler_1.deleteProduct, errorHandler_1.default);
 router.route("/:id/upload").put(body_parser_1.default.raw({ type: ["image/jpeg", "image/png"], limit: "5mb" }), productControler_1.uploadPhoto, errorHandler_1.default);
+router.route("/paginate").get(productControler_1.productPagination, errorHandler_1.default);
 exports.default = router;
 //# sourceMappingURL=productsRoute.js.map

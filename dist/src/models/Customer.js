@@ -47,15 +47,51 @@ exports.default = (sequelize) => {
                 },
             },
         },
-        billingAddress: {
+        streetAdress: {
             type: sequelize_1.DataTypes.STRING,
             allowNull: false,
             validate: {
                 notNull: {
-                    msg: 'Provide a value to billing adress'
+                    msg: 'Provide a value to street adress'
                 },
                 notEmpty: {
-                    msg: 'Provide a value to billing adress'
+                    msg: 'Provide a value to street adress'
+                },
+            },
+        },
+        province: {
+            type: sequelize_1.DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: 'Provide a value to province'
+                },
+                notEmpty: {
+                    msg: 'Provide a value to province'
+                },
+            },
+        },
+        city: {
+            type: sequelize_1.DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: 'Provide a value to city'
+                },
+                notEmpty: {
+                    msg: 'Provide a value to city'
+                },
+            },
+        },
+        postalCode: {
+            type: sequelize_1.DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: {
+                    msg: 'Provide a value to postal code'
+                },
+                notEmpty: {
+                    msg: 'Provide a value to postal code'
                 },
             },
         },
@@ -72,7 +108,7 @@ exports.default = (sequelize) => {
             },
         },
         phone: {
-            type: sequelize_1.DataTypes.BIGINT,
+            type: sequelize_1.DataTypes.STRING,
             allowNull: false,
             validate: {
                 notNull: {
@@ -83,9 +119,9 @@ exports.default = (sequelize) => {
                 },
             },
         },
-        picture: {
-            type: sequelize_1.DataTypes.BLOB("long")
-        }
+        // picture: {
+        //     type: DataTypes.BLOB("long")
+        // }
     }, {
         sequelize: sequelize,
         tableName: "costumers",

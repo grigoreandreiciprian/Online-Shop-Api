@@ -20,8 +20,29 @@ const getOrders = (0, express_async_handler_1.default)(((req, res) => __awaiter(
     res.status(200).json(orders);
 })));
 exports.getOrders = getOrders;
-const addOrder = (0, express_async_handler_1.default)(((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const order = req.body;
+const addOrder = (0, express_async_handler_1.default)(((req, res, nex) => __awaiter(void 0, void 0, void 0, function* () {
+    //logica?
+    const user = req.user;
+    const cart = req.body;
+    const order = {
+        ammount: 1,
+        orderEmail: user.email,
+        shippingAdress: user.streetAdress,
+        orderDate: "10/28/2021",
+        orderStatus: "true",
+        customer_id: user.id
+    };
+    let or = yield db_1.default.models.Order.create(order);
+    cart.forEach((e) => __awaiter(void 0, void 0, void 0, function* () {
+        const product = yield db_1.default.models.Product.findByPk(e.id);
+        const details = {
+            order_id: or.get().id,
+            product_id: e.id,
+            quantity: e.quantity,
+            price: e.quantity
+        };
+        yield db_1.default.models.OrderDetails.create(details);
+    }));
     yield db_1.default.models.Order.create(order);
     res.status(200).end();
 })));

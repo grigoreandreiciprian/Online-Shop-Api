@@ -2,16 +2,18 @@
 
 import db from "../config/db";
 
-import { RequestHandler, Request, Response } from "express";
+import { RequestHandler, Request, Response, NextFunction } from "express";
 import AsyncHandler from "express-async-handler";
+import paginate from "express-paginate"
 
 
 
 const getProducts: RequestHandler = AsyncHandler((async (req: Request, res: Response) => {
 
-    let books = await db.models.Product.findAll();
+    let products = await db.models.Product.findAll();
 
-    res.status(200).json(books);
+    console.log(req);
+    res.status(200).json(products);
 }))
 
 
@@ -77,6 +79,31 @@ const uploadPhoto: RequestHandler = AsyncHandler((async (req: Request, res: Resp
 
 }))
 
+const productPagination: RequestHandler = AsyncHandler((async (req: Request, res: Response, next) => {
 
 
-export { getProducts, addProduct, updateProduct, deleteProduct, uploadPhoto }
+    //@ts-ignore
+    db.models.Product.findAndCountAll({ limit: req.query.limit, offset: req.skip })
+        .then(results => {
+            const itemCount = results.count;
+            //@ts-ignore
+            const pageCount = Math.ceil(results.count / req.query.limit);
+
+            res.status(200).json({
+                products: results.rows,
+                pageCount,
+                itemCount,
+                pages: paginate.getArrayPages(req)(3, pageCount, req.query.page)
+            }).end();
+
+        }).catch(err => next(err))
+}))
+
+
+
+
+
+
+
+
+export { getProducts, addProduct, updateProduct, deleteProduct, uploadPhoto, productPagination }

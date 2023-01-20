@@ -4,18 +4,19 @@ import AsyncHandler from "express-async-handler";
 
 import jwt from "jsonwebtoken"
 import db from "../config/db";
+import { RequestAuth } from "../models/RequestAuth";
+import Customer, { CostumerAtributes } from "../models/Customer";
 
-const protect: RequestHandler = AsyncHandler((async (req: Request, res: Response, next: NextFunction) => {
+const protect: RequestHandler = AsyncHandler((async (req: RequestAuth, res: Response, next: NextFunction) => {
 
     let token: String
-    console.log("Intra in protect")
+
     if (
         req.headers.authorization && req.headers.authorization.startsWith("Bearer")
     ) {
 
         try {
 
-            console.log("aici")
 
             token = req.headers.authorization.split(" ")[1]
 
@@ -23,12 +24,28 @@ const protect: RequestHandler = AsyncHandler((async (req: Request, res: Response
 
             const user = await db.models.Customer.findByPk(decoded.id);
 
-            next()
+
+
+            req.user = {
+                id: user.get().id,
+                email: user.get().email,
+                password: user.get().password,
+                fullName: user.get().fullName,
+                streetAdress: user.get().streetAdress,
+                province: user.get().province,
+                city: user.get().city,
+                postalCode: user.get().postalCode,
+                country: user.get().country,
+                phone: user.get().phone
+            }
+
+
+
+            next();
 
         } catch (e) {
 
             throw new Error("No authorizion ,toke failed")
-            res.status(401)
         }
     }
 

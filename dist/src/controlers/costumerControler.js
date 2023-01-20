@@ -24,17 +24,31 @@ const getAll = (0, express_async_handler_1.default)(((req, res) => __awaiter(voi
 exports.getAll = getAll;
 const addUser = (0, express_async_handler_1.default)(((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const hashedPasword = bcrypt_1.default.hashSync(req.body.password, 10);
+    const users = yield db_1.default.models.Customer.findAll();
     const user = {
         id: req.body.id,
         email: req.body.email,
         password: hashedPasword,
         fullName: req.body.fullName,
-        billingAddress: req.body.billingAddress,
+        streetAdress: req.body.streetAdress,
+        province: req.body.province,
+        city: req.body.city,
+        postalCode: req.body.postalCode,
         country: req.body.country,
         phone: req.body.phone
     };
-    yield db_1.default.models.Customer.create(user);
-    res.status(200).end();
+    let validUser = yield db_1.default.models.Customer.findOne({ where: { email: `${user.email}` } });
+    let validPhone = yield db_1.default.models.Customer.findOne({ where: { phone: `${user.phone}` } });
+    if (validUser) {
+        res.status(400).end();
+    }
+    else if (validPhone) {
+        res.status(401).end();
+    }
+    else {
+        yield db_1.default.models.Customer.create(user);
+        res.status(200).end();
+    }
 })));
 exports.addUser = addUser;
 const updateUser = (0, express_async_handler_1.default)(((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -81,7 +95,7 @@ const uploadPhoto = (0, express_async_handler_1.default)(((req, res) => __awaite
     let user = yield db_1.default.models.Customer.findByPk(id);
     if (user) {
         user.set({
-            picture: req.body,
+        // picture: req.body,
         });
         user.save();
     }

@@ -19,21 +19,34 @@ const getAll: RequestHandler = AsyncHandler((async (req: Request, res: Response)
 const addUser: RequestHandler = AsyncHandler((async (req: Request, res: Response) => {
 
     const hashedPasword = bcrypt.hashSync(req.body.password, 10)
+
+    const users = await db.models.Customer.findAll()
     const user = {
         id: req.body.id,
         email: req.body.email,
         password: hashedPasword,
         fullName: req.body.fullName,
-        billingAddress: req.body.billingAddress,
+        streetAdress: req.body.streetAdress,
+        province: req.body.province,
+        city: req.body.city,
+        postalCode: req.body.postalCode,
         country: req.body.country,
         phone: req.body.phone
     }
 
+    let validUser = await db.models.Customer.findOne({ where: { email: `${user.email}` } })
+    let validPhone = await db.models.Customer.findOne({ where: { phone: `${user.phone}` } })
 
+    if (validUser) {
+        res.status(400).end()
+    } else if (validPhone) {
+        res.status(401).end()
+    } else {
+        await db.models.Customer.create(user)
 
-    await db.models.Customer.create(user)
+        res.status(200).end()
+    }
 
-    res.status(200).end()
 }))
 
 const updateUser: RequestHandler = AsyncHandler((async (req: Request, res: Response) => {
@@ -106,7 +119,7 @@ const uploadPhoto: RequestHandler = AsyncHandler((async (req: Request, res: Resp
 
     if (user) {
         user.set({
-            picture: req.body,
+            // picture: req.body,
         });
 
         user.save();

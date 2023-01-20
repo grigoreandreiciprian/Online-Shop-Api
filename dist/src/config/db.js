@@ -10,6 +10,7 @@ const OrderDetails_1 = __importDefault(require("../models/OrderDetails"));
 const Order_1 = __importDefault(require("../models/Order"));
 const Product_1 = __importDefault(require("../models/Product"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const Favorites_1 = __importDefault(require("../models/Favorites"));
 dotenv_1.default.config();
 const connectDB = () => {
     try {
@@ -24,7 +25,8 @@ const connectDB = () => {
                 Customer: (0, Customer_1.default)(sequelize),
                 Product: (0, Product_1.default)(sequelize),
                 OrderDetails: (0, OrderDetails_1.default)(sequelize),
-                Order: (0, Order_1.default)(sequelize)
+                Order: (0, Order_1.default)(sequelize),
+                Favorite: (0, Favorites_1.default)(sequelize)
             }
         };
         db.models.Customer.hasMany(db.models.Order, {
@@ -71,6 +73,20 @@ const connectDB = () => {
                 name: 'product_id',
                 allowNull: false
             },
+        });
+        db.models.Favorite.belongsTo(db.models.Product, {
+            as: 'fk_product_id',
+            foreignKey: {
+                name: 'productId',
+                allowNull: false
+            }
+        });
+        db.models.Favorite.belongsTo(db.models.Customer, {
+            as: 'fk_costumer_id',
+            foreignKey: {
+                name: 'costumerId',
+                allowNull: false
+            }
         });
         return db;
     }

@@ -11,7 +11,7 @@ const router = express.Router()
 
 
 router.route("/").get(protect, getAll, errorHandler)
-router.route("/").post(protect, addDetails, errorHandler)
+router.route("/").post(addDetails, errorHandler)
 router.route("/:id").put(protect, UpdateDetails, errorHandler)
 router.route("/:id").delete(protect, deleteDetail, errorHandler)
 

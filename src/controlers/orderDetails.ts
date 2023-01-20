@@ -14,15 +14,11 @@ const getAll: RequestHandler = AsyncHandler((async (req: Request, res: Response)
 
 const addDetails: RequestHandler = AsyncHandler((async (req: Request, res: Response) => {
 
+    const items = req.body
 
+    console.log(items)
 
-    const detail = req.body
-
-    console.log(detail)
-
-
-
-    await db.models.OrderDetails.create(detail)
+    // await db.models.OrderDetails.create(detail)
 
     res.status(200).end()
 }))

@@ -5,7 +5,9 @@ import Customer from "../models/Customer";
 import OrderDetails from "../models/OrderDetails";
 import Order from "../models/Order";
 import Product from "../models/Product";
+
 import dotenv from "dotenv";
+import Favorite from "../models/Favorites";
 
 dotenv.config();
 
@@ -27,7 +29,8 @@ const connectDB = () => {
                 Customer: Customer(sequelize),
                 Product: Product(sequelize),
                 OrderDetails: OrderDetails(sequelize),
-                Order: Order(sequelize)
+                Order: Order(sequelize),
+                Favorite: Favorite(sequelize)
             }
         }
         db.models.Customer.hasMany(db.models.Order, {
@@ -77,6 +80,24 @@ const connectDB = () => {
                 allowNull: false
             },
         });
+
+        db.models.Favorite.belongsTo(db.models.Product, {
+            as: 'fk_product_id',
+
+            foreignKey: {
+                name: 'productId',
+                allowNull: false
+            }
+        })
+
+        db.models.Favorite.belongsTo(db.models.Customer, {
+            as: 'fk_costumer_id',
+
+            foreignKey: {
+                name: 'costumerId',
+                allowNull: false
+            }
+        })
         return db;
 
     } catch (e) {

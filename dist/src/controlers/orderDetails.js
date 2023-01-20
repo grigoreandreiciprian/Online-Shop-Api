@@ -21,9 +21,9 @@ const getAll = (0, express_async_handler_1.default)(((req, res) => __awaiter(voi
 })));
 exports.getAll = getAll;
 const addDetails = (0, express_async_handler_1.default)(((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const detail = req.body;
-    console.log(detail);
-    yield db_1.default.models.OrderDetails.create(detail);
+    const items = req.body;
+    console.log(items);
+    // await db.models.OrderDetails.create(detail)
     res.status(200).end();
 })));
 exports.addDetails = addDetails;

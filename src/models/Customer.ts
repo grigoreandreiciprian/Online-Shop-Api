@@ -8,10 +8,13 @@ export interface CostumerAtributes {
     email: string
     password: string
     fullName: string
-    billingAddress: string
+    streetAdress: string
+    province: string
+    city: string
+    postalCode: string
     country: string
-    phone: bigint
-    picture: Blob
+    phone: string
+    // picture: Blob
 
 }
 
@@ -75,20 +78,73 @@ export default (sequelize: Sequelize) => {
             },
         },
 
-        billingAddress: {
+
+        streetAdress: {
             type: DataTypes.STRING,
             allowNull: false,
 
             validate: {
                 notNull: {
-                    msg: 'Provide a value to billing adress'
+                    msg: 'Provide a value to street adress'
                 },
 
                 notEmpty: {
-                    msg: 'Provide a value to billing adress'
+                    msg: 'Provide a value to street adress'
                 },
             },
         },
+
+        province: {
+            type: DataTypes.STRING,
+            allowNull: false,
+
+            validate: {
+                notNull: {
+                    msg: 'Provide a value to province'
+                },
+
+                notEmpty: {
+                    msg: 'Provide a value to province'
+                },
+            },
+        },
+
+        city: {
+            type: DataTypes.STRING,
+            allowNull: false,
+
+            validate: {
+                notNull: {
+                    msg: 'Provide a value to city'
+                },
+
+                notEmpty: {
+                    msg: 'Provide a value to city'
+                },
+            },
+        },
+
+        postalCode: {
+            type: DataTypes.STRING,
+            allowNull: false,
+
+            validate: {
+                notNull: {
+                    msg: 'Provide a value to postal code'
+                },
+
+                notEmpty: {
+                    msg: 'Provide a value to postal code'
+                },
+            },
+        },
+
+
+
+
+
+
+
 
         country: {
             type: DataTypes.STRING,
@@ -107,7 +163,7 @@ export default (sequelize: Sequelize) => {
 
 
         phone: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.STRING,
             allowNull: false,
 
             validate: {
@@ -121,9 +177,9 @@ export default (sequelize: Sequelize) => {
             },
         },
 
-        picture: {
-            type: DataTypes.BLOB("long")
-        }
+        // picture: {
+        //     type: DataTypes.BLOB("long")
+        // }
 
     }, {
         sequelize: sequelize,
